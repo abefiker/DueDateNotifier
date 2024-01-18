@@ -10,8 +10,10 @@ namespace DueDateNotifier.Models
         [BsonElement("UserName")]
         public string? Name { get; set; }
         [BsonElement("Email")]
-        public string? Email { get; set; };
+        public string? Email { get; set; }
         [BsonElement("Password")]
         public string? Password { get; set; }
+        [BsonElement("Roles")]
+        public string? Role { get; set;}
     }
 }
