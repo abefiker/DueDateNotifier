@@ -1,10 +1,11 @@
 using DueDateNotifier.Models;
-
+using DueDateNotifier.Services;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.Configure<DueDateNotifierSettings>(
     builder.Configuration.GetSection("DueDateNotifierDatabase"));
-    
 
+
+builder.Services.AddSingleton<DueDateServices>();
 // Add services to the container.
 
 builder.Services.AddControllers();
