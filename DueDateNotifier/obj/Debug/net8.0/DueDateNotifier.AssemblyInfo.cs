@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DueDateNotifier")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+82a161dafdd177ed97c75851d601b0384e4321a6")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2af1cb330d14b1d8ec133560be3850cbdd03be9b")]
 [assembly: System.Reflection.AssemblyProductAttribute("DueDateNotifier")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DueDateNotifier")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

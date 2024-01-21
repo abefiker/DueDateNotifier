@@ -6,16 +6,27 @@ namespace DueDateNotifier.Services
 {
     public class DueDateServices
     {
-        private readonly IMongoCollection<Users> _userCollection;
+       
         private readonly IMongoCollection<TaskModel> _taskCollection;
         public DueDateServices(IOptions<DueDateNotifierSettings> dueDateNotifierSettings){
-        var client = new MongoClient(dueDateNotifierSettings.Value.ConntectionString);
+        var client = new MongoClient(dueDateNotifierSettings.Value.ConnectionString);
         var database = client.GetDatabase(dueDateNotifierSettings.Value.DatabaseName);
-        var _userCollection = database.GetCollection<Users>(dueDateNotifierSettings.Value.UsersCollectionName); // Replace User with your actual user model
-        var _taskCollection = database.GetCollection<TaskModel>(dueDateNotifierSettings.Value.TasksCollectionName); // Replace TaskModel with your actual task model
+         // Replace User with your actual user model
+         _taskCollection = database.GetCollection<TaskModel>(dueDateNotifierSettings.Value.TasksCollectionName); // Replace TaskModel with your actual task model
         }
-        public async Task<List<TaskModel>> GetAsync() =>
-        await _taskCollection.Find(_ => true).ToListAsync();
+        public async Task<List<TaskModel>> GetAsync()
+        {
+            try
+            {
+                return await _taskCollection.Find(_ => true).ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                // Log or handle the exception appropriately
+                Console.WriteLine($"Error in GetAsync: {ex}");
+                return new List<TaskModel>();
+            }
+        }
 
         public async Task<TaskModel?> GetAsync(string id) =>
             await _taskCollection.Find(x => x.Id == id).FirstOrDefaultAsync();
