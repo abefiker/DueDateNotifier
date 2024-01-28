@@ -4,7 +4,6 @@ using DueDateNotifier.Models;
 using DueDateNotifier.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
@@ -13,11 +12,8 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.Configure<DueDateNotifierSettings>(
-    builder.Configuration.GetSection("DueDateNotifierDatabase"));
+builder.Services.AddScoped<ITodoService, TodoService>();
 
-
-builder.Services.AddSingleton<DueDateServices>();
 
 BsonSerializer.RegisterSerializer(new GuidSerializer(MongoDB.Bson.BsonType.String));
 BsonSerializer.RegisterSerializer(new DateTimeSerializer(MongoDB.Bson.BsonType.String));
@@ -56,6 +52,12 @@ builder.Services.ConfigureMongoDbIdentity<ApplicationUser, ApplicationRole, Guid
     .AddDefaultTokenProviders();
 
 
+
+builder.Services.ConfigureMongoDbIdentity<ApplicationTodos, ApplicationRole, Guid>(mongoDbIdentityConfig)
+    .AddUserManager<UserManager<ApplicationTodos>>() 
+    .AddDefaultTokenProviders();
+
+
 builder.Services.AddAuthentication(x =>
 {
     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -81,6 +83,13 @@ builder.Services.AddAuthentication(x =>
 });
 
 
+builder.Services.AddSingleton<IMongoDatabase>(provider =>
+{
+    var mongoClient = new MongoClient("mongodb://localhost:27017");
+    return mongoClient.GetDatabase("youtubemongodb");
+});
+
+builder.Services.AddSingleton<IHostedService,DueDateNotifierService>();
 
 // Add services to the container.
 

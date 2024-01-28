@@ -60,7 +60,6 @@ namespace DueDateNotifier.Controllers
                     Email = request.Email,
                     ConcurrencyStamp = Guid.NewGuid().ToString(),
                     UserName = request.Email,
-
                 };
                 var createUserResult = await _userManager.CreateAsync(userExists, request.Password);
                 if (!createUserResult.Succeeded) return new RegisterResponse { Message = $"Create user failed {createUserResult?.Errors?.First()?.Description}", Success = false };
@@ -109,7 +108,7 @@ namespace DueDateNotifier.Controllers
                         new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString() ?? "defaultSub"),
                         new Claim(ClaimTypes.Name, user.UserName ?? "defaultName"),
                         new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                        new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
+                        new Claim(ClaimTypes.DenyOnlyPrimarySid,user.Id.ToString())
                     };
 
                 var roles = await _userManager.GetRolesAsync(user);
@@ -135,7 +134,7 @@ namespace DueDateNotifier.Controllers
                     Message = "Login Successful",
                     Email = user?.Email,
                     Success = true,
-                    UserId = user?.Id.ToString()
+                    UserId = user?.Id.ToString()!
                 };
 
 
